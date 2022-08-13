@@ -1,4 +1,5 @@
 // Generated with https://query.wikidata.org/
+// (some bits were adapted)
 
 class SPARQLQueryDispatcher {
   constructor( endpoint ) {
@@ -6,7 +7,9 @@ class SPARQLQueryDispatcher {
   }
 
   query( sparqlQuery ) {
-    const fullUrl = this.endpoint + '?query=' + encodeURIComponent( sparqlQuery );
+    const fullUrl = this.endpoint
+      + '?query=' + encodeURIComponent( sparqlQuery )
+      + '&ts=' + Date.now(); // cache-busting;
     const headers = { 'Accept': 'application/sparql-results+json' };
     return fetch( fullUrl, { headers } ).then( body => body.json() );
   }
