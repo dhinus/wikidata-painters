@@ -1,18 +1,25 @@
 <script>
-  export let artistName, correct;
+  export let artistName, correct, index;
 
-  let reveal = false;
+  import { createEventDispatcher } from 'svelte';
 
-  function handleClick(e) {
-    reveal = true;
+  const dispatch = createEventDispatcher();
+
+  function click() {
+    dispatch('message', {
+      index
+    });
   }
 </script>
 
-<button class:correct class:reveal on:click="{handleClick}">
+<button
+  class:right="{correct === 'right'}"
+  class:wrong="{correct === 'wrong'}"
+  on:click={click}>
   {artistName}
 </button>
 
 <style>
-  .reveal {background: #e36868}
-  .reveal.correct {background: #68e378}
+  .wrong {background: #e36868}
+  .right {background: #68e378}
 </style>
