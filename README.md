@@ -24,7 +24,7 @@ The Node.js version on the Toolforge bastion is too old, so you must run the
 build locally and commit the "dist" folder:
 
 ```
-npm run dist
+npm run build
 git add .
 git commit -m "Build vX.Y.Z"
 git push
