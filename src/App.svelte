@@ -1,13 +1,3 @@
-<style>
-  .notes {
-    font-size: 0.8em;
-    margin-top: 5em;
-  }
-  img {
-    max-width: 70%;
-  }
-</style>
-
 <script>
   import ArtistButton from './lib/ArtistButton.svelte';
   import Loading from './lib/Loading.svelte';
@@ -21,7 +11,8 @@
 
   let paintings = [];
   let imgsrc;
-  let randomPick;
+  let randomIndex;
+  let randomPainting;
   let reveal;
 
   let showLoading = true;
@@ -29,9 +20,9 @@
   Wikidata.queryDispatcher.query(Wikidata.paintersQuery).then(res => {
     showLoading = false;
     paintings = res.results.bindings;
-    randomPick = getRandomInt(0,5);
-    imgsrc = paintings[randomPick].image.value;
-  console.log(JSON.stringify(paintings[randomPick].painterLabel.value))
+    randomIndex = getRandomInt(0,5);
+    randomPainting = paintings[randomIndex];
+    imgsrc = randomPainting.image.value;
   });
 
   function revealAnswer() {
@@ -46,7 +37,7 @@
 
   function handleClick(event) {
     const index = event.detail.index;
-    if (index === randomPick) {
+    if (index === randomIndex) {
       paintings[index].correct = "right";
       revealAnswer();
     } else {
@@ -61,17 +52,19 @@
 {#if showLoading}
   <Loading/>
 {:else}
-  <img src="{imgsrc}" alt="Image of a painting" />
+  <img src="{imgsrc}" alt="A random painting" />
 {/if}
 
 {#if reveal}
   <p>
-  <button onClick="window.location.reload();"><strong>Play again</strong></button>
+    <a href={randomPainting.painting.value} target="_blank">
+      {randomPainting.painterLabel.value} -
+      {randomPainting.paintingLabel.value}
+    </a>
   </p>
 
   <p>
-  {paintings[randomPick].painterLabel.value} -
-  {paintings[randomPick].paintingLabel.value}
+    <button onClick="window.location.reload();"><strong>Play again</strong></button>
   </p>
 {/if}
 
@@ -88,4 +81,16 @@
 
 <p class="notes">
   Powered by <a href="https://www.wikidata.org/">Wikidata</a>.
+  Source code is <a href="https://github.com/dhinus/wikidata-painters/">here</a>.
 </p>
+
+<style>
+  .notes {
+    font-size: 0.8em;
+    margin-top: 5em;
+  }
+  img {
+    max-width: 80%;
+    max-height: 80vh;
+  }
+</style>
