@@ -3,12 +3,6 @@
   import Loading from './lib/Loading.svelte';
   import * as Wikidata from './lib/wikidata.js';
 
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-  }
-
   let paintings = [];
   let imgsrc;
   let randomIndex;
@@ -17,13 +11,28 @@
 
   let showLoading = true;
 
-  Wikidata.queryDispatcher.query(Wikidata.paintersQuery).then(res => {
-    showLoading = false;
-    paintings = res.results.bindings;
-    randomIndex = getRandomInt(0,5);
-    randomPainting = paintings[randomIndex];
-    imgsrc = randomPainting.image.value;
-  });
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+  }
+
+  function play() {
+    paintings = [];
+    imgsrc = null;
+    randomIndex = null;
+    randomPainting = null;
+    showLoading = true;
+    reveal = false;
+
+    Wikidata.queryDispatcher.query(Wikidata.paintersQuery).then(res => {
+      showLoading = false;
+      paintings = res.results.bindings;
+      randomIndex = getRandomInt(0,5);
+      randomPainting = paintings[randomIndex];
+      imgsrc = randomPainting.image.value;
+    });
+  }
 
   function revealAnswer() {
     reveal = true;
@@ -45,6 +54,8 @@
     }
   }
 
+  play();
+
 </script>
 
 <h1>Who painted this?</h1>
@@ -64,7 +75,7 @@
   </p>
 
   <p>
-    <button onClick="window.location.reload();"><strong>Play again</strong></button>
+    <button on:click="{play}"><strong>Play again</strong></button>
   </p>
 {/if}
 
