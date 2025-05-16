@@ -33,7 +33,8 @@ To start/stop/restart the webservice:
 
 ```
 toolforge webservice buildservice start --mount=none
-toolforge webservice buildservice stop --mount=none
+toolforge webservice buildservice stop
+toolforge webservice buildservice restart
 ```
 
 To see the logs:
