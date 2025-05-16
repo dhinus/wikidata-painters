@@ -20,24 +20,28 @@ npm run dev
 
 This project is deployed on [Toolforge](https://wikitech.wikimedia.org/wiki/Portal:Toolforge).
 
-The Node.js version on the Toolforge bastion is too old, so you must run the
-build locally and commit the "dist" folder:
-
-```
-npm run build
-git add .
-git commit -m "Build vX.Y.Z"
-git push
-```
-
-Then deploy from the Toolforge bastion (please note that you must be a member of
-the project on Toolforge):
+If you are a member of the `whopaintedthis` project on Toolforge, you can
+trigger a build with:
 
 ```
 ssh login.toolforge.org
-
 $ become whopaintedthis
-tools.whopaintedthis@tools-sgebastion-10:~$ cd wikidata-painters/
-tools.whopaintedthis@tools-sgebastion-10:~/wikidata-painters$ git pull
+$ toolforge build start -L https://github.com/dhinus/wikidata-painters
 ```
 
+To start/stop/restart the webservice:
+
+```
+toolforge webservice buildservice start --mount=none
+toolforge webservice buildservice stop --mount=none
+```
+
+To see the logs:
+
+```
+toolforge webservice logs
+```
+
+See also:
+* https://wikitech.wikimedia.org/wiki/Help:Toolforge/Building_container_images
+* https://wikitech.wikimedia.org/wiki/Help:Toolforge/Building_container_images/My_first_static_tool_using_Node.js
