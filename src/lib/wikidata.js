@@ -17,7 +17,7 @@ class SPARQLQueryDispatcher {
 
 const endpointUrl = 'https://query.wikidata.org/sparql';
 const paintersQuery = `SELECT ?painterLabel ?painting ?paintingLabel ?image WITH {
-  SELECT ?painter ?painting ?image WHERE {
+  SELECT ?painter (SAMPLE(?painting) AS ?painting) (SAMPLE(?image) AS ?image) WHERE {
     ?painting wdt:P18 ?image .
     ?painting wdt:P31 wd:Q3305213 . # instance of (P31) painting (Q3305213)
     ?painting wdt:P170 ?painter .   # created by (P170)
@@ -25,6 +25,7 @@ const paintersQuery = `SELECT ?painterLabel ?painting ?paintingLabel ?image WITH
     ?painter wdt:P135 wd:Q40415 .   # who belonged to the impressionist (Q40415) movement (P135)
     BIND(MD5(CONCAT(str(?painting),str(RAND()))) as ?random)
   }
+  GROUP BY ?painter
   ORDER BY ?random
   LIMIT 5
 } AS %results WHERE {
