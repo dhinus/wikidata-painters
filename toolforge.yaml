@@ -1,0 +1,12 @@
+defaults:
+  alerts:
+    enabled: true
+components:
+  web:
+    build:
+      repository: https://github.com/dhinus/wikidata-painters
+      ref: main
+    run:
+      command: web
+      port: 8000
+      publish: /
